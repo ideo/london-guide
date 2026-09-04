@@ -1,0 +1,879 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDEO London Welcome Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+  /* ============ TOKENS ============ */
+  /* A deliberate, single-mode dark design (IDEO's night-sky brand at full
+     strength) rather than an adaptive light/dark page — every value is set
+     explicitly so it holds regardless of the viewer's system theme. */
+  :root {
+    --bg: #000000;
+    --bg-raised: #131313;
+    --bg-raised-2: #1c1c1c;
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255,255,255,0.72);
+    --text-muted: #8b98a3;
+    --border-subtle: rgba(255,255,255,0.09);
+    --border-medium: rgba(255,255,255,0.15);
+    --border-strong: rgba(255,255,255,0.28);
+    --accent: #D0FF00;
+    --accent-ink: #0A0A0A;
+    --accent-dim: rgba(208,255,0,0.14);
+    --shadow: 0 16px 44px rgba(0,0,0,0.7);
+    --map-line: rgba(139,152,163,0.45);
+    --map-road: rgba(139,152,163,0.26);
+    --star-dot: #536575;
+    --star-opacity: 0.55;
+    --rule: rgba(255,255,255,0.14);
+  }
+
+  /* ============ BASE ============ */
+  * , *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Manrope', 'Segoe UI', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* faint night-sky texture across the whole page */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--star-dot) 1px, transparent 1.3px);
+    background-size: 46px 46px;
+    opacity: var(--star-opacity);
+  }
+
+  a { color: inherit; }
+  h1, h2, h3 { text-wrap: balance; font-weight: 300; margin: 0; }
+  img, svg { max-width: 100%; }
+
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  @media (max-width: 640px) { .container { padding: 0 16px; } }
+
+  section { padding: 80px 0; border-bottom: 1px solid var(--rule); scroll-margin-top: 76px; }
+  section:last-of-type { border-bottom: none; }
+  @media (max-width: 640px) { section { padding: 56px 0; } }
+
+  .overline {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 16px; display: block;
+  }
+  .h1 { font-size: clamp(34px, 5.2vw, 56px); font-weight: 300; line-height: 1.08; letter-spacing: -0.01em; }
+  .h2 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 300; line-height: 1.15; margin-bottom: 16px; }
+  .h3 { font-size: 19px; font-weight: 600; line-height: 1.3; }
+  .lede { font-size: clamp(16px, 1.8vw, 19px); font-weight: 500; color: var(--text-secondary); max-width: 62ch; }
+  .body-text { font-size: 16px; color: var(--text-secondary); max-width: 66ch; }
+  .caption { font-size: 12.5px; color: var(--text-muted); font-weight: 600; }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; padding: 0 24px;
+    background: rgba(0,0,0,0.86);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .nav-mark { font-size: 13px; font-weight: 800; letter-spacing: 0.16em; }
+  .nav-links { display: flex; gap: 28px; list-style: none; margin: 0; padding: 0; }
+  .nav-links a {
+    text-decoration: none; font-size: 13.5px; font-weight: 600; color: var(--text-secondary);
+    padding: 4px 0; border-bottom: 2px solid transparent; transition: color 150ms, border-color 150ms;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible { color: var(--text-primary); border-color: var(--accent); }
+  .nav-links { overflow-x: auto; white-space: nowrap; }
+  @media (max-width: 720px) { .nav-links { gap: 18px; } .nav-links a { font-size: 12.5px; } }
+
+  /* ============ HERO ============ */
+  .hero { padding: 72px 0 64px; border-bottom: 1px solid var(--rule); }
+  .hero-top { display: flex; align-items: flex-start; gap: 24px; justify-content: space-between; flex-wrap: wrap; }
+  .hero-asterisk { flex-shrink: 0; }
+  .hero-meta {
+    margin-top: 28px; display: flex; gap: 32px; flex-wrap: wrap;
+    padding-top: 24px; border-top: 1px solid var(--rule);
+  }
+  .hero-meta div { display: flex; flex-direction: column; gap: 4px; }
+  .hero-meta .val { font-size: 15px; font-weight: 600; }
+
+  /* ============ STUDIO ============ */
+  .studio-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; margin-top: 8px; align-items: start; }
+  @media (max-width: 860px) { .studio-grid { grid-template-columns: 1fr; } }
+  .studio-side { display: flex; flex-direction: column; gap: 20px; }
+  .side-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: 8px;
+    padding: 20px;
+  }
+  .side-card.map-card { padding: 0; overflow: hidden; }
+  .side-card.map-card .building-caption { padding: 20px; margin-top: 0; }
+  .building-caption { margin-top: 16px; display: flex; flex-direction: column; gap: 2px; }
+  .building-caption .val { font-size: 14.5px; font-weight: 700; }
+
+  /* ============ CARDS / GRID ============ */
+  .grid { display: grid; gap: 20px; }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 900px) { .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { .grid-3, .grid-4, .grid-2 { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: 8px;
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    transition: border-color 150ms, transform 150ms;
+  }
+  .card:hover { border-color: var(--border-strong); }
+  .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em;
+    padding: 5px 10px; border-radius: 9999px;
+    background: var(--accent-dim); color: var(--text-primary);
+    border: 1px solid var(--border-subtle);
+    white-space: nowrap;
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+  .card-link {
+    margin-top: auto; padding-top: 4px;
+    font-size: 13px; font-weight: 700; color: var(--accent);
+    text-decoration: none; display: inline-flex; align-items: center; gap: 4px;
+  }
+  .card-link:hover { text-decoration: underline; }
+
+  /* ============ MAP (Leaflet + OpenStreetMap) ============ */
+  .map-shell {
+    background: var(--bg-raised);
+    border: 1px solid var(--border-medium);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+  }
+  .map-controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    font-family: inherit; font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 8px 16px; border-radius: 9999px; cursor: pointer;
+    background: transparent; color: var(--text-secondary);
+    border: 1px solid var(--border-medium);
+    transition: all 150ms ease-in-out;
+  }
+  .chip:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .chip.is-active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+  /* two-up layout: numbered index list beside the live map */
+  .maprow { display: grid; grid-template-columns: 240px 1fr; gap: 20px; align-items: start; }
+  @media (max-width: 760px) { .maprow { grid-template-columns: 1fr; } }
+
+  .map-index {
+    display: flex; flex-direction: column; gap: 2px;
+    max-height: 520px; overflow-y: auto;
+    border: 1px solid var(--border-subtle); border-radius: 8px;
+    background: var(--bg);
+  }
+  .map-index-group { padding: 10px 12px 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+  .map-row {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%; text-align: left; font-family: inherit;
+    background: transparent; border: none; border-left: 2px solid transparent;
+    padding: 8px 12px; cursor: pointer; color: var(--text-secondary);
+    transition: background 150ms, color 150ms, border-color 150ms, opacity 200ms;
+  }
+  .map-row:hover { background: var(--bg-raised-2); color: var(--text-primary); }
+  .map-row.is-selected { background: var(--accent-dim); border-left-color: var(--accent); color: var(--text-primary); }
+  .map-row.dim { opacity: 0.32; }
+  .map-row .row-num {
+    flex: none; width: 20px; height: 20px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 800; color: var(--text-primary);
+    background: var(--bg-raised-2); border: 1px solid var(--border-medium);
+  }
+  .map-row.is-selected .row-num,
+  .map-row:hover .row-num { border-color: var(--accent); }
+  .map-row .row-name { flex: 1; font-size: 12.5px; font-weight: 600; line-height: 1.25; }
+  .map-row .row-time { flex: none; font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
+  .map-index-hint { padding: 10px 12px; font-size: 11px; color: var(--text-muted); border-top: 1px solid var(--border-subtle); }
+
+  #neighbourhood-map {
+    height: 520px; width: 100%; border-radius: 8px; background: var(--bg-raised-2);
+    border: 1px solid var(--border-subtle);
+  }
+  #studio-map { height: 260px; width: 100%; background: var(--bg-raised-2); }
+  .map-offline-note {
+    display: flex; align-items: center; justify-content: center; text-align: center;
+    height: 100%; padding: 24px; font-size: 12.5px; color: var(--text-muted);
+  }
+
+  /* dark-mode tint over the OSM basemap tiles */
+  #neighbourhood-map .leaflet-tile-pane,
+  #studio-map .leaflet-tile-pane {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }
+  .leaflet-container { background: var(--bg-raised-2) !important; font-family: 'Manrope', sans-serif; }
+  .leaflet-control-zoom a {
+    background: var(--bg-raised-2) !important; color: var(--text-primary) !important;
+    border-color: var(--border-medium) !important;
+  }
+  .leaflet-control-zoom a:hover { background: var(--bg-raised) !important; }
+  .leaflet-control-attribution {
+    background: rgba(0,0,0,0.6) !important; color: var(--text-muted) !important; font-size: 9.5px !important;
+  }
+  .leaflet-control-attribution a { color: var(--text-secondary) !important; }
+
+  /* numbered pin markers */
+  .geo-pin {
+    position: relative; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--bg-raised-2); border: 1.5px solid var(--text-secondary);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.55);
+    transition: transform 200ms, border-color 200ms, opacity 200ms;
+  }
+  .geo-pin.is-studio { width: 26px; height: 26px; background: var(--accent); border-color: var(--accent); }
+  .geo-pin-num { font-family: 'Manrope', sans-serif; font-size: 10px; font-weight: 800; color: var(--text-primary); }
+  .geo-pin.dim { opacity: 0.28; }
+  .geo-pin.is-pulsing { transform: scale(1.35); border-color: var(--accent); }
+  .geo-pin-ping {
+    position: absolute; inset: -6px; border-radius: 50%;
+    border: 1.5px solid var(--accent); opacity: 0;
+  }
+  .geo-pin.is-pulsing .geo-pin-ping { animation: geoPing 1100ms ease-out 2; }
+  @keyframes geoPing {
+    0% { opacity: 0.9; transform: scale(0.6); }
+    100% { opacity: 0; transform: scale(2.4); }
+  }
+  @media (prefers-reduced-motion: reduce) { .geo-pin.is-pulsing .geo-pin-ping { animation: none; } }
+
+  .geo-tooltip.leaflet-tooltip {
+    background: var(--bg-raised-2); color: var(--text-primary);
+    border: 1px solid var(--border-medium); border-radius: 6px;
+    padding: 4px 9px; font-family: 'Manrope', sans-serif; font-size: 11.5px; font-weight: 700;
+    box-shadow: var(--shadow);
+  }
+  .geo-tooltip.leaflet-tooltip::before { display: none; }
+
+  .map-caption { margin-top: 16px; }
+
+  /* ============ LISTS ============ */
+  .tip-row {
+    display: flex; gap: 20px; padding: 20px 0; border-top: 1px solid var(--rule);
+    align-items: baseline; flex-wrap: wrap;
+  }
+  .tip-row:last-child { border-bottom: none; }
+  .tip-row .tip-name { flex: 0 0 auto; min-width: 220px; font-size: 17px; font-weight: 700; }
+  .tip-row .tip-desc { flex: 1 1 320px; color: var(--text-secondary); font-size: 15px; }
+
+  footer { padding: 48px 0 64px; }
+  .foot-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+  ::selection { background: var(--accent); color: var(--accent-ink); }
+  a:focus-visible, button:focus-visible, .chip:focus-visible {
+    outline: 2px solid var(--accent); outline-offset: 2px;
+  }
+
+  /* ============ COOKIE BANNER ============ */
+  .cookie-banner {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 500;
+    background: var(--bg-raised); border-top: 1px solid var(--border-medium);
+    box-shadow: 0 -12px 32px rgba(0,0,0,0.5);
+    padding: 18px 24px;
+  }
+  .cookie-banner[hidden] { display: none; }
+  .cookie-banner__inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .cookie-banner__text { flex: 1 1 420px; font-size: 13.5px; line-height: 1.5; color: var(--text-secondary); }
+  .cookie-banner__text strong { color: var(--text-primary); }
+  .cookie-banner__actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; flex-wrap: wrap; }
+  .btn-pill {
+    font-family: inherit; font-size: 12.5px; font-weight: 700; letter-spacing: 0.02em;
+    padding: 9px 18px; border-radius: 9999px; cursor: pointer;
+    border: 1px solid var(--border-medium); background: transparent; color: var(--text-secondary);
+    transition: all 150ms ease-in-out;
+  }
+  .btn-pill:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .btn-pill.is-primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+  .btn-pill.is-primary:hover { filter: brightness(0.95); }
+  @media (max-width: 560px) { .cookie-banner__actions { width: 100%; } .btn-pill { flex: 1; text-align: center; } }
+
+  /* ============ PRIVACY MODAL ============ */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 600;
+    background: rgba(0,0,0,0.7);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .modal-overlay[hidden] { display: none; }
+  .modal {
+    background: var(--bg-raised); border: 1px solid var(--border-medium); border-radius: 12px;
+    box-shadow: var(--shadow);
+    max-width: 560px; width: 100%; max-height: 85vh; overflow-y: auto;
+    padding: 28px;
+  }
+  .modal__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 4px; }
+  .modal__title { font-size: 20px; font-weight: 500; line-height: 1.25; }
+  .modal__close {
+    flex: none; width: 32px; height: 32px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: 1px solid var(--border-medium); color: var(--text-secondary);
+    cursor: pointer; font-size: 16px; line-height: 1; transition: all 150ms ease-in-out;
+  }
+  .modal__close:hover { border-color: var(--border-strong); color: var(--text-primary); }
+  .modal__body { margin-top: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .modal__body p { font-size: 14.5px; line-height: 1.6; color: var(--text-secondary); }
+  .modal__body p strong { color: var(--text-primary); }
+  .modal__body ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+  .modal__body li { font-size: 14.5px; line-height: 1.6; color: var(--text-secondary); }
+  .modal__footer { margin-top: 22px; display: flex; justify-content: flex-end; }
+  .footer-privacy-link {
+    background: none; border: none; padding: 0; font-family: inherit; cursor: pointer;
+    font-size: inherit; color: var(--text-muted); text-decoration: underline;
+  }
+  .footer-privacy-link:hover { color: var(--text-primary); }
+</style>
+</head>
+<body>
+<div class="cookie-banner" id="cookie-banner" hidden role="region" aria-label="Cookie notice">
+  <div class="cookie-banner__inner">
+    <p class="cookie-banner__text">
+      This page doesn't use cookies or collect any data &mdash; we just save a small note in your browser's local
+      storage so this notice won't appear again. See our <strong>Privacy Notice</strong> for details.
+    </p>
+    <div class="cookie-banner__actions">
+      <button type="button" class="btn-pill" id="open-privacy-from-banner">Privacy Notice</button>
+      <button type="button" class="btn-pill is-primary" id="acknowledge-cookies">Acknowledge</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="privacy-modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="privacy-modal-title" id="privacy-modal">
+    <div class="modal__header">
+      <span class="modal__title" id="privacy-modal-title">Privacy Notice</span>
+      <button type="button" class="modal__close" id="close-privacy-modal" aria-label="Close privacy notice">&times;</button>
+    </div>
+    <div class="modal__body">
+      <p>This is a simple prototype web page built by IDEO for visiting clients &mdash; a guide to the London studio and neighbourhood. It doesn't require an account and doesn't collect personal data.</p>
+      <ul>
+        <li><strong>No login, no tracking.</strong> There's nothing to sign in to, and this page doesn't use analytics or third-party trackers.</li>
+        <li><strong>Nothing is sent anywhere.</strong> The page runs entirely in your browser and doesn't transmit any data to IDEO or anyone else.</li>
+        <li><strong>What we do store:</strong> a small note in your browser's local storage, so this notice doesn't appear again once you've acknowledged it. That note stays on your device &mdash; it's never sent to us.</li>
+      </ul>
+      <p>Questions about this guide? Reach out to your IDEO London contact.</p>
+    </div>
+    <div class="modal__footer">
+      <button type="button" class="btn-pill is-primary" id="close-privacy-modal-footer">Close</button>
+    </div>
+  </div>
+</div>
+
+<nav class="nav">
+  <span class="nav-mark">IDEO</span>
+  <ul class="nav-links">
+    <li><a href="#studio">Studio</a></li>
+    <li><a href="#stay">Stay</a></li>
+    <li><a href="#eat">Eat</a></li>
+    <li><a href="#coffee">Coffee</a></li>
+    <li><a href="#around">Getting around</a></li>
+    <li><a href="#map">Map</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="hero-top">
+      <div>
+        <span class="overline">London studio &middot; visitor guide</span>
+        <h1 class="h1">Welcome to<br>IDEO London.</h1>
+      </div>
+      <svg class="hero-asterisk" width="64" height="64" viewBox="0 0 64 64" aria-hidden="true">
+        <g stroke="#D0FF00" stroke-width="3" stroke-linecap="round">
+          <line x1="32" y1="4" x2="32" y2="60"/>
+          <line x1="4" y1="32" x2="60" y2="32"/>
+          <line x1="12" y1="12" x2="52" y2="52"/>
+          <line x1="52" y1="12" x2="12" y2="52"/>
+        </g>
+      </svg>
+    </div>
+    <p class="lede" style="margin-top:20px;">
+      Everything you need for a visit to Herbal House &mdash; where to find us, where to sleep,
+      and where the studio actually eats lunch. Put together by the team who live here.
+    </p>
+    <div class="hero-meta">
+      <div><span class="caption">Address</span><span class="val">Herbal House, 8 Back Hill, London EC1R 5EN</span></div>
+      <div><span class="caption">Phone</span><span class="val">+44 (0)20 7713 2600</span></div>
+      <div><span class="caption">Nearest station</span><span class="val">Farringdon &middot; 6 min walk</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="studio">
+  <div class="container">
+    <span class="overline">01 &mdash; The studio</span>
+    <h2 class="h2">A small, tight-knit team, right in the middle of it.</h2>
+    <div class="studio-grid">
+      <div class="studio-text">
+        <p class="body-text">
+          IDEO London is a small, tight-knit community from around the world, spread across the 5th and 6th
+          floors of Herbal House. We work hands-on across purpose, product, brand, organisation and business
+          model &mdash; on the knotty, systemic problems that don't have an obvious next step.
+        </p>
+        <p class="body-text" style="margin-top:16px;">
+          The neighbourhood suits the work: London is steeped in history but forever reinventing itself, and
+          Clerkenwell in particular has been a home for makers, printers and craftspeople for centuries. You're
+          a five-minute walk from Farringdon Station and surrounded by more good coffee per square foot than
+          almost anywhere else in the city &mdash; use the rest of this guide to make the most of it.
+        </p>
+      </div>
+      <div class="studio-side">
+        <div class="side-card map-card">
+          <div id="studio-map" role="img" aria-label="Map showing the IDEO London studio at Herbal House, 8 Back Hill"></div>
+          <div class="building-caption">
+            <span class="caption">Herbal House</span>
+            <span class="val">8 Back Hill, London EC1R 5EN</span>
+            <a class="card-link" style="margin-top:10px;" href="https://www.google.com/maps/search/?api=1&amp;query=IDEO+London%2C+Herbal+House%2C+8+Back+Hill%2C+London+EC1R+5EN" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="stay">
+  <div class="container">
+    <span class="overline">02 &mdash; Where to stay</span>
+    <h2 class="h2">Six options, all walkable.</h2>
+    <p class="lede" style="margin-bottom:32px;">From basic-and-cheap to a proper splurge &mdash; pick based on budget and how much you want to be able to walk everywhere.</p>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="card-top"><span class="h3">Ruby Stella Hotel</span><span class="pill"><span class="dot"></span>2 min</span></div>
+        <p class="caption">15&ndash;28 Eyre Street Hill, London EC1R 5EW</p>
+        <p class="body-text">Brand new and right on our doorstep, next to The Gunmakers pub. Looks great in photos &mdash; the easy pick if someone wants to walk everywhere.</p>
+        <a class="card-link" href="https://www.ruby-hotels.com/en/hotels/ruby-stella-london" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">hub by Premier Inn</span><span class="pill"><span class="dot"></span>5 min</span></div>
+        <p class="caption">80 Farringdon Road, London EC1M 3HE</p>
+        <p class="body-text">No-frills and compact, and reliably the cheapest option nearby. Not remotely fancy, but does exactly what it needs to.</p>
+        <a class="card-link" href="https://www.premierinn.com/gb/en/hotels/england/greater-london/london/hub-london-clerkenwell.html" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">The Zetter / Zetter Townhouse</span><span class="pill"><span class="dot"></span>10 min</span></div>
+        <p class="caption">49&ndash;50 St John's Square, London EC1V 4JJ</p>
+        <p class="body-text">Boutique and a little theatrical. A good pick for decompressing with a cocktail in the lounge at the end of a long studio day.</p>
+        <a class="card-link" href="https://thezetter.com/clerkenwell/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Malmaison London</span><span class="pill"><span class="dot"></span>12&ndash;15 min</span></div>
+        <p class="caption">Charterhouse Square, London EC1M 6AH</p>
+        <p class="body-text">Moody, masculine decor near the Barbican &mdash; not to everyone's taste, but guests who've stayed there consistently rave about it.</p>
+        <a class="card-link" href="https://www.malmaison.com/locations/london/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Crowne Plaza King's Cross</span><span class="pill"><span class="dot"></span>15&ndash;20 min</span></div>
+        <p class="caption">1 King's Cross Road, London WC1X 9HX</p>
+        <p class="body-text">Further out, but handy for anyone arriving by train or who'd rather be closer to King's Cross. Still an easy, flat walk to the studio.</p>
+        <a class="card-link" href="https://www.ihg.com/crowneplaza/hotels/gb/en/london/lonkc/hoteldetail" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">The Hoxton, Holborn</span><span class="pill"><span class="dot"></span>20 min</span></div>
+        <p class="caption">199&ndash;206 High Holborn, London WC1V 7BD</p>
+        <p class="body-text">The splurge option, and probably the most expensive on this list. Lovely restaurant and work-lounge, and close enough to Covent Garden to explore if there's time.</p>
+        <a class="card-link" href="https://thehoxton.com/london/holborn/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="eat">
+  <div class="container">
+    <span class="overline">03 &mdash; Eating out</span>
+    <h2 class="h2">How the studio actually eats.</h2>
+    <p class="lede" style="margin-bottom:32px;">Eight go-tos, from a five-minute street-food lunch to a sit-down dinner.</p>
+    <div class="grid grid-4">
+      <div class="card">
+        <div class="card-top"><span class="h3">Leather Lane Market</span><span class="pill">Street food</span></div>
+        <p class="caption">Leather Lane, London EC1N</p>
+        <p class="body-text">Daily food stalls, fast and cheap &mdash; a good change from a desk lunch.</p>
+        <a class="card-link" href="https://www.visitlondon.com/things-to-do/place/35656321-leather-lane-market" target="_blank" rel="noopener">More info &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Exmouth Market</span><span class="pill">Street food</span></div>
+        <p class="caption">Exmouth Market, London EC1R</p>
+        <p class="body-text">London's other great lunch market, and home to most of the restaurants below.</p>
+        <a class="card-link" href="https://exmouth.london/" target="_blank" rel="noopener">More info &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Morchella</span><span class="pill">Lunch or dinner</span></div>
+        <p class="caption">84&ndash;86 Rosebery Avenue, London EC1R 4QY</p>
+        <p class="body-text">Mediterranean small plates just off Exmouth Market &mdash; an easy pick for a nicer meal.</p>
+        <a class="card-link" href="https://www.morchelladining.co.uk/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Vesper</span><span class="pill">Lunch or dinner</span></div>
+        <p class="caption">8&ndash;10 Exmouth Market, London EC1R 4QA</p>
+        <p class="body-text">Jackson Boxer's newest &mdash; buzzy, modern British, and an instant Clerkenwell favourite.</p>
+        <a class="card-link" href="https://vesper.restaurant/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Quality Wines</span><span class="pill">Small plates</span></div>
+        <p class="caption">88&ndash;94 Farringdon Road, London EC1R 3EA</p>
+        <p class="body-text">Small plates and a serious wine list &mdash; best saved for a relaxed evening.</p>
+        <a class="card-link" href="https://www.exploretock.com/qualitywines" target="_blank" rel="noopener">Book / website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Black Bear Burger</span><span class="pill">Burgers</span></div>
+        <p class="caption">17 Exmouth Market, London EC1R 4QD</p>
+        <p class="body-text">The Exmouth Market burger of choice.</p>
+        <a class="card-link" href="https://www.blackbearburger.com/exmouthmarket" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Ninth Ward</span><span class="pill">Burgers</span></div>
+        <p class="caption">99&ndash;101 Farringdon Road, London EC1R 3BN</p>
+        <p class="body-text">New Orleans-inspired bar and kitchen &mdash; good burgers, good cocktails.</p>
+        <a class="card-link" href="https://www.squaremeal.co.uk/restaurants/ninth-ward_10699" target="_blank" rel="noopener">More info &#8599;</a>
+      </div>
+      <div class="card">
+        <div class="card-top"><span class="h3">Brutto</span><span class="pill">Italian</span></div>
+        <p class="caption">36&ndash;37 Greenhill Rents, Cowcross St, London EC1M 6BN</p>
+        <p class="body-text">Buzzy trattoria near Smithfield, famous locally for its &pound;5 negroni.</p>
+        <a class="card-link" href="https://www.opentable.co.uk/r/trattoria-brutto-london" target="_blank" rel="noopener">Book a table &#8599;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="coffee">
+  <div class="container">
+    <span class="overline">04 &mdash; Coffee</span>
+    <h2 class="h2">Clerkenwell runs on the stuff.</h2>
+    <p class="lede" style="margin-bottom:32px;">Four favourites, each good for something different.</p>
+    <div class="grid grid-4">
+      <div class="card">
+        <span class="h3">Mousetail</span>
+        <p class="caption">12 Mount Pleasant, London WC1X 0BU</p>
+        <p class="body-text">Order oat milk with confidence, and don't skip the honey chai latte.</p>
+        <a class="card-link" href="https://thatsup.co.uk/london/cafe/mouse-tail-coffee-farringdon/" target="_blank" rel="noopener">More info &#8599;</a>
+      </div>
+      <div class="card">
+        <span class="h3">Prufrock Coffee</span>
+        <p class="caption">23&ndash;25 Leather Lane, London EC1N 7TE</p>
+        <p class="body-text">A Leather Lane institution &mdash; go here for a genuinely great espresso.</p>
+        <a class="card-link" href="https://prufrockcoffee.com/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <span class="h3">Attendant</span>
+        <p class="caption">75 Leather Lane, London EC1N 7TJ</p>
+        <p class="body-text">Get the blueberry matcha iced latte.</p>
+        <a class="card-link" href="https://www.the-attendant.com/" target="_blank" rel="noopener">Website &#8599;</a>
+      </div>
+      <div class="card">
+        <span class="h3">Fwd:Coffee</span>
+        <p class="caption">54 Farringdon Road, London EC1R 3BL</p>
+        <p class="body-text">Closest to the studio and fastest in and out &mdash; the pick when you're short on time.</p>
+        <a class="card-link" href="https://thatsup.co.uk/london/cafe/fwd-coffee-farringdon/" target="_blank" rel="noopener">More info &#8599;</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="around">
+  <div class="container">
+    <span class="overline">05 &mdash; Getting around</span>
+    <h2 class="h2">Cabs, buses, and the fastest way to Heathrow.</h2>
+    <div style="margin-top: 8px;">
+      <div class="tip-row">
+        <div class="tip-name">Black cabs</div>
+        <div class="tip-desc">Easy to hail right outside on Clerkenwell Road.</div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-name">Buses</div>
+        <div class="tip-desc">The 55 or 38 run to Oxford Street, if there's time for some shopping.</div>
+      </div>
+      <div class="tip-row">
+        <div class="tip-name">Farringdon Station</div>
+        <div class="tip-desc">A 6-minute walk gets you Thameslink (north or south), the Tube (Circle, Hammersmith &amp; City, Metropolitan lines), and the Elizabeth line direct to Heathrow.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="container">
+    <span class="overline">06 &mdash; Find your way around</span>
+    <h2 class="h2">The neighbourhood, mapped from our front door.</h2>
+    <p class="lede" style="margin-bottom:32px;">
+      A real, live map this time &mdash; drag and zoom to explore. Filter by category, then click a name
+      to fly there. Numbers match the pins.
+    </p>
+
+    <div class="map-shell">
+      <div class="map-controls">
+        <div class="chips" role="group" aria-label="Filter the map">
+          <button class="chip is-active" data-cat="all">All</button>
+          <button class="chip" data-cat="stay">Stay</button>
+          <button class="chip" data-cat="eat">Eat</button>
+          <button class="chip" data-cat="coffee">Coffee</button>
+          <button class="chip" data-cat="transit">Transit</button>
+        </div>
+        <span class="caption">17 spots, all within a 20&nbsp;min walk</span>
+      </div>
+
+      <div class="maprow">
+        <nav class="map-index" aria-label="Numbered list of mapped locations">
+          <div class="map-index-group">Stay</div>
+          <button class="map-row" data-n="01" data-cat="stay"><span class="row-num">01</span><span class="row-name">Ruby Stella</span><span class="row-time">2 min</span></button>
+          <button class="map-row" data-n="02" data-cat="stay"><span class="row-num">02</span><span class="row-name">hub by Premier Inn</span><span class="row-time">5 min</span></button>
+          <button class="map-row" data-n="03" data-cat="stay"><span class="row-num">03</span><span class="row-name">The Zetter / Townhouse</span><span class="row-time">10 min</span></button>
+          <button class="map-row" data-n="04" data-cat="stay"><span class="row-num">04</span><span class="row-name">Malmaison</span><span class="row-time">12&ndash;15 min</span></button>
+          <button class="map-row" data-n="05" data-cat="stay"><span class="row-num">05</span><span class="row-name">Crowne Plaza King's X</span><span class="row-time">15&ndash;20 min</span></button>
+          <button class="map-row" data-n="06" data-cat="stay"><span class="row-num">06</span><span class="row-name">The Hoxton, Holborn</span><span class="row-time">20 min</span></button>
+
+          <div class="map-index-group">Eat</div>
+          <button class="map-row" data-n="07" data-cat="eat"><span class="row-num">07</span><span class="row-name">Leather Lane</span><span class="row-time">7 min</span></button>
+          <button class="map-row" data-n="08" data-cat="eat"><span class="row-num">08</span><span class="row-name">Exmouth Market</span><span class="row-time">9 min</span></button>
+          <button class="map-row" data-n="09" data-cat="eat"><span class="row-num">09</span><span class="row-name">Quality Wines</span><span class="row-time">6 min</span></button>
+          <button class="map-row" data-n="10" data-cat="eat"><span class="row-num">10</span><span class="row-name">Brutto</span><span class="row-time">8 min</span></button>
+
+          <div class="map-index-group">Coffee</div>
+          <button class="map-row" data-n="11" data-cat="coffee"><span class="row-num">11</span><span class="row-name">Mousetail</span><span class="row-time">8 min</span></button>
+          <button class="map-row" data-n="12" data-cat="coffee"><span class="row-num">12</span><span class="row-name">Prufrock</span><span class="row-time">7 min</span></button>
+          <button class="map-row" data-n="13" data-cat="coffee"><span class="row-num">13</span><span class="row-name">Attendant</span><span class="row-time">7 min</span></button>
+          <button class="map-row" data-n="14" data-cat="coffee"><span class="row-num">14</span><span class="row-name">Fwd:Coffee</span><span class="row-time">3 min</span></button>
+
+          <div class="map-index-group">Transit</div>
+          <button class="map-row" data-n="15" data-cat="transit"><span class="row-num">15</span><span class="row-name">Farringdon Stn</span><span class="row-time">6 min</span></button>
+          <button class="map-row" data-n="16" data-cat="transit"><span class="row-num">16</span><span class="row-name">Bus 55 / 38</span><span class="row-time">Clerkenwell Rd</span></button>
+          <div class="map-index-hint">Click a name to fly there.</div>
+        </nav>
+
+        <div id="neighbourhood-map" role="img" aria-label="Live map of the IDEO London studio and nearby hotels, restaurants, cafes and transit"></div>
+      </div>
+
+      <p class="caption map-caption">Real OpenStreetMap data &mdash; walking times are approximate and measured from Herbal House. Studio marked in Alchemy yellow.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-row">
+      <span class="caption">Put together by the London studio &mdash; let us know if you find a better negroni.
+        &nbsp;&middot;&nbsp; <button type="button" class="footer-privacy-link" id="open-privacy-from-footer">Privacy Notice</button>
+      </span>
+      <span class="nav-mark" style="font-size:12px;">IDEO LONDON</span>
+    </div>
+  </div>
+</footer>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  (function () {
+    var STUDIO = { n: null, name: 'IDEO Studio', cat: 'studio', lat: 51.522343, lng: -0.109629, sub: 'Herbal House, Back Hill' };
+    var SPOTS = [
+      { n: '01', name: 'Ruby Stella',            cat: 'stay',    lat: 51.522827, lng: -0.110633, time: '2 min' },
+      { n: '02', name: 'hub by Premier Inn',      cat: 'stay',    lat: 51.520319, lng: -0.105648, time: '5 min' },
+      { n: '03', name: 'The Zetter / Townhouse',  cat: 'stay',    lat: 51.523148, lng: -0.103239, time: '10 min' },
+      { n: '04', name: 'Malmaison',               cat: 'stay',    lat: 51.520878, lng: -0.100191, time: '12–15 min' },
+      { n: '05', name: 'Crowne Plaza King’s X', cat: 'stay', lat: 51.526384, lng: -0.113715, time: '15–20 min' },
+      { n: '06', name: 'The Hoxton, Holborn',     cat: 'stay',    lat: 51.517111, lng: -0.122573, time: '20 min' },
+      { n: '07', name: 'Leather Lane',            cat: 'eat',     lat: 51.521000, lng: -0.109600, time: 'street food · 7 min' },
+      { n: '08', name: 'Exmouth Market',          cat: 'eat',     lat: 51.526687, lng: -0.108498, time: 'Morchella · Vesper · Black Bear · Ninth Ward' },
+      { n: '09', name: 'Quality Wines',           cat: 'eat',     lat: 51.524851, lng: -0.110116, time: '6 min' },
+      { n: '10', name: 'Brutto',                  cat: 'eat',     lat: 51.519657, lng: -0.102519, time: '8 min' },
+      { n: '11', name: 'Mousetail',                cat: 'coffee', lat: 51.523437, lng: -0.112784, time: '8 min' },
+      { n: '12', name: 'Prufrock',                 cat: 'coffee', lat: 51.519968, lng: -0.109569, time: '7 min' },
+      { n: '13', name: 'Attendant',                cat: 'coffee', lat: 51.520448, lng: -0.109737, time: '7 min' },
+      { n: '14', name: 'Fwd:Coffee',               cat: 'coffee', lat: 51.523314, lng: -0.107946, time: '3 min' },
+      { n: '15', name: 'Farringdon Stn',           cat: 'transit', lat: 51.520560, lng: -0.105000, time: '6 min' },
+      { n: '16', name: 'Bus 55 / 38',              cat: 'transit', lat: 51.523200, lng: -0.109000, time: 'Clerkenwell Rd' }
+    ];
+
+    function pinIcon(spot) {
+      var isStudio = spot.cat === 'studio';
+      var size = isStudio ? 26 : 22;
+      var html = '<div class="geo-pin cat-' + spot.cat + (isStudio ? ' is-studio' : '') + '">' +
+        '<span class="geo-pin-ping"></span>' +
+        (isStudio ? '' : '<span class="geo-pin-num">' + spot.n + '</span>') +
+        '</div>';
+      return L.divIcon({ html: html, className: '', iconSize: [size, size], iconAnchor: [size / 2, size / 2] });
+    }
+
+    function addDarkTiles(map) {
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        subdomains: 'abc',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'
+      }).addTo(map);
+    }
+
+    function offlineNote(el) {
+      if (!el) return;
+      el.innerHTML = '<div class="map-offline-note">Map couldn’t load — open this file with an internet connection, or use the Google Maps link above.</div>';
+    }
+
+    if (typeof window.L === 'undefined') {
+      offlineNote(document.getElementById('studio-map'));
+      offlineNote(document.getElementById('neighbourhood-map'));
+      return;
+    }
+
+    // ---- studio mini-map: static preview, single pin ----
+    var studioMapEl = document.getElementById('studio-map');
+    if (studioMapEl) {
+      var studioMap = L.map(studioMapEl, {
+        zoomControl: false, dragging: false, scrollWheelZoom: false,
+        doubleClickZoom: false, touchZoom: false, boxZoom: false, keyboard: false, tap: false
+      }).setView([STUDIO.lat, STUDIO.lng], 16);
+      addDarkTiles(studioMap);
+      L.marker([STUDIO.lat, STUDIO.lng], { icon: pinIcon(STUDIO), keyboard: false }).addTo(studioMap);
+    }
+
+    // ---- neighbourhood map: full interactive, all spots ----
+    var mapEl = document.getElementById('neighbourhood-map');
+    if (!mapEl) return;
+
+    var map = L.map(mapEl, { zoomControl: true, scrollWheelZoom: false }).setView([STUDIO.lat, STUDIO.lng], 15);
+    addDarkTiles(map);
+
+    var bounds = [[STUDIO.lat, STUDIO.lng]];
+    var studioMarker = L.marker([STUDIO.lat, STUDIO.lng], { icon: pinIcon(STUDIO) }).addTo(map);
+    studioMarker.bindTooltip(STUDIO.name + ' — ' + STUDIO.sub, { direction: 'top', offset: [0, -14], className: 'geo-tooltip', permanent: true });
+
+    var markers = {};
+    SPOTS.forEach(function (spot) {
+      var marker = L.marker([spot.lat, spot.lng], { icon: pinIcon(spot) }).addTo(map);
+      marker.bindTooltip(spot.name + ' · ' + spot.time, { direction: 'top', offset: [0, -12], className: 'geo-tooltip' });
+      markers[spot.n] = { marker: marker, spot: spot };
+      bounds.push([spot.lat, spot.lng]);
+    });
+    map.fitBounds(bounds, { padding: [30, 30] });
+
+    var chips = document.querySelectorAll('.chip');
+    var rows = document.querySelectorAll('.map-row');
+
+    function applyFilter(cat) {
+      Object.keys(markers).forEach(function (n) {
+        var entry = markers[n];
+        var match = cat === 'all' || entry.spot.cat === cat;
+        var el = entry.marker.getElement();
+        var pin = el && el.querySelector('.geo-pin');
+        if (pin) pin.classList.toggle('dim', !match);
+      });
+      rows.forEach(function (row) {
+        var match = cat === 'all' || row.getAttribute('data-cat') === cat;
+        row.classList.toggle('dim', !match);
+      });
+    }
+
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('is-active'); });
+        chip.classList.add('is-active');
+        applyFilter(chip.getAttribute('data-cat'));
+      });
+    });
+
+    rows.forEach(function (row) {
+      row.addEventListener('click', function () {
+        var entry = markers[row.getAttribute('data-n')];
+        rows.forEach(function (r) { r.classList.remove('is-selected'); });
+        row.classList.add('is-selected');
+        if (!entry) return;
+
+        map.flyTo([entry.spot.lat, entry.spot.lng], 17, { duration: 0.9 });
+        var el = entry.marker.getElement();
+        var pin = el && el.querySelector('.geo-pin');
+        if (pin) {
+          pin.classList.remove('is-pulsing');
+          void pin.offsetWidth;
+          pin.classList.add('is-pulsing');
+          window.setTimeout(function () { pin.classList.remove('is-pulsing'); }, 2200);
+        }
+        entry.marker.openTooltip();
+      });
+    });
+  })();
+</script>
+
+<script>
+  (function () {
+    var STORAGE_KEY = 'ideo-london-guide-cookie-ack';
+    var banner = document.getElementById('cookie-banner');
+    var overlay = document.getElementById('privacy-modal-overlay');
+    var modal = document.getElementById('privacy-modal');
+    var ackBtn = document.getElementById('acknowledge-cookies');
+    var openFromBanner = document.getElementById('open-privacy-from-banner');
+    var openFromFooter = document.getElementById('open-privacy-from-footer');
+    var closeBtn = document.getElementById('close-privacy-modal');
+    var closeBtnFooter = document.getElementById('close-privacy-modal-footer');
+    var lastFocused = null;
+
+    function ack() {
+      try { window.localStorage.setItem(STORAGE_KEY, '1'); } catch (e) { /* storage unavailable — banner just won't persist */ }
+      if (banner) banner.hidden = true;
+    }
+
+    function openModal() {
+      if (!overlay) return;
+      lastFocused = document.activeElement;
+      overlay.hidden = false;
+      if (closeBtn) closeBtn.focus();
+      document.addEventListener('keydown', onKeydown);
+    }
+
+    function closeModal() {
+      if (!overlay) return;
+      overlay.hidden = true;
+      document.removeEventListener('keydown', onKeydown);
+      if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+    }
+
+    function onKeydown(e) {
+      if (e.key === 'Escape') { closeModal(); return; }
+      if (e.key !== 'Tab' || !modal) return;
+      var focusable = modal.querySelectorAll('button, a[href]');
+      if (!focusable.length) return;
+      var first = focusable[0], last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+
+    if (ackBtn) ackBtn.addEventListener('click', ack);
+    if (openFromBanner) openFromBanner.addEventListener('click', openModal);
+    if (openFromFooter) openFromFooter.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (closeBtnFooter) closeBtnFooter.addEventListener('click', closeModal);
+    if (overlay) overlay.addEventListener('click', function (e) { if (e.target === overlay) closeModal(); });
+
+    var alreadyAcknowledged = false;
+    try { alreadyAcknowledged = window.localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) { /* storage unavailable — show the banner every visit */ }
+    if (banner && !alreadyAcknowledged) banner.hidden = false;
+  })();
+</script>
+</body>
+</html>
